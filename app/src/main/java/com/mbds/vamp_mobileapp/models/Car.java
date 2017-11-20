@@ -12,13 +12,26 @@ public class Car {
     int charge;
     int temperature_ext;
     boolean locked;
+    boolean started;
     Location currentLocation;
+    Media honkSound;
 
     // Users
     User [] allowedUsers;
 
 
     public Car() {}
+
+
+    // Functionalities
+    public void startCar() {}
+    public void stopCar() {}
+    public void openCar() {}
+    public void closeCar() {}
+    public void openLights() {}
+    public void closeLights() {}
+    public void setTemperatureClim(int degres) {}
+    public void honk() {}
 
 
     public String getBrand() {
@@ -77,13 +90,15 @@ public class Car {
         this.locked = locked;
     }
 
+    public boolean isStarted() { return started; }
+
+    public void setStarted(boolean started) { this.started = started; }
+
     public Location getCurrentLocation() {
         return currentLocation;
     }
 
-    public void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+    public void setCurrentLocation(Location currentLocation) { this.currentLocation = currentLocation; }
 
     public User[] getAllowedUsers() {
         return allowedUsers;
@@ -92,4 +107,8 @@ public class Car {
     public void setAllowedUsers(User[] allowedUsers) {
         this.allowedUsers = allowedUsers;
     }
+
+    public Media getHonkSound() { return honkSound; }
+
+    public void setHonkSound(Media honkSound) { this.honkSound = honkSound; }
 }
