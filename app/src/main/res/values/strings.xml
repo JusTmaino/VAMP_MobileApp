@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">VAMP_MobileApp</string>
+
+    <!-- LOGIN .MainActivity -->
+    <string name="login">AUTHENTIFICATION</string>
+    <string name="connection">CONNEXION</string>
+
+    <string name="car_img">photo_voiture </string>
+    <string name="home_lock">déverrouiller</string>
+    <string name="home_start">démarrer</string>
+
+    <string name="home_registerNumber">Immatriculation</string>
+    <string name="home_brand">Marque</string>
+    <string name="home_model">Modèle</string>
+    <string name="home_charge">Taux de charge</string>
+
+
+    <string name="controls_windows">Gestion des vitres</string>
+    <string name="controls_start">Démarrage du véhicule</string>
+    <string name="controls_lock">Gestion des portes</string>
+
+</resources>
