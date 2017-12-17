@@ -16,8 +16,10 @@
     <string name="car_view">photo_voiture</string>
 
     <!-- .HomeFragment -->
-    <string name="home_lock">déverrouiller</string>
-    <string name="home_start">démarrer</string>
+    <string name="home_lock">Verrouillage des portes</string>
+    <string name="home_unlock">Déverrouillage des portes</string>
+    <string name="home_start">Démarrage du véhicule </string>
+    <string name="home_stop">Arrêt du véhicule</string>
     <string name="home_undefined">non défini</string>
     <string name="home_registerNumber">Immatriculation</string>
     <string name="home_brand">Marque</string>
