@@ -2,38 +2,17 @@ package com.mbds.vamp.vamp_mobileapp.models;
 
 public class Profile {
 
-    // Car equipment
-    int preferedTemperature;
-
-    // Music Manager
-    int soundVolume;
-    Playlist [] playlists;
+    Setting [] settings;
 
 
     public Profile() {}
-    
 
-    public int getPreferedTemperature() {
-        return preferedTemperature;
+
+    public Setting[] getSettings() {
+        return settings;
     }
 
-    public void setPreferedTemperature(int preferedTemperature) {
-        this.preferedTemperature = preferedTemperature;
-    }
-
-    public int getSoundVolume() {
-        return soundVolume;
-    }
-
-    public void setSoundVolume(int soundVolume) {
-        this.soundVolume = soundVolume;
-    }
-
-    public Playlist[] getPlaylists() {
-        return playlists;
-    }
-
-    public void setPlaylists(Playlist[] playlists) {
-        this.playlists = playlists;
+    public void setSettings(Setting[] settings) {
+        this.settings = settings;
     }
 }
