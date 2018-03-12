@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mbds.vamp.vamp_mobileapp.controllers.AppActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/action_logout"
         android:icon="@android:drawable/ic_lock_power_off"
+        android:orderInCategory="100"
         android:title="@string/action_log"
         app:showAsAction="always" />
 </menu>

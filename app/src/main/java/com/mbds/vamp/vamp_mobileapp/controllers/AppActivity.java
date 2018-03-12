@@ -1,5 +1,8 @@
 package com.mbds.vamp.vamp_mobileapp.controllers;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,15 +14,37 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.github.nkzawa.socketio.client.IO;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mbds.vamp.vamp_mobileapp.R;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.ControlsFragment;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.HomeFragment;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.LocationFragment;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.ProfileFragment;
+import com.mbds.vamp.vamp_mobileapp.models.Car;
+import com.mbds.vamp.vamp_mobileapp.models.User;
+import com.mbds.vamp.vamp_mobileapp.utils.Config;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.params.ClientPNames;
+import cz.msebera.android.httpclient.entity.ContentType;
+import cz.msebera.android.httpclient.entity.StringEntity;
+
 
 public class AppActivity extends AppCompatActivity {
 
@@ -85,12 +110,14 @@ public class AppActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            logout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -107,10 +134,14 @@ public class AppActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
 
-                case 0 : return new HomeFragment();
-                case 1 : return new ControlsFragment();
-                case 2 : return new LocationFragment();
-                case 3 : return new ProfileFragment();
+                case 0:
+                    return new HomeFragment();
+                case 1:
+                    return new ControlsFragment();
+                case 2:
+                    return new LocationFragment();
+                case 3:
+                    return new ProfileFragment();
 
             }
 
@@ -123,4 +154,9 @@ public class AppActivity extends AppCompatActivity {
             return 4;
         }
     }
+
+    private void logout() {
+        //TODO
+    }
+
 }

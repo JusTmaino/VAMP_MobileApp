@@ -1,16 +1,20 @@
 package com.mbds.vamp.vamp_mobileapp.models;
 
+import java.util.Arrays;
+
 public class Car {
 
     // Description
     String registerNumber;
     String brand;
     String model;
+    int seatCount;
     String avatar;
 
     // State
     Controls controls;
     int charge;
+    boolean locked;
     Location currentLocation;
 
     // Users
@@ -82,5 +86,26 @@ public class Car {
 
     public void setAllowedUsers(User[] allowedUsers) {
         this.allowedUsers = allowedUsers;
+    }
+
+    public int getSeatCount() {
+        return seatCount;
+    }
+
+    public void setSeatCount(int seatCount) {
+        this.seatCount = seatCount;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    @Override
+    public String toString() {
+        return brand + " " + model;
     }
 }

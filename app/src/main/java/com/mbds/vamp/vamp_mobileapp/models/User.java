@@ -1,20 +1,21 @@
 package com.mbds.vamp.vamp_mobileapp.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
 
     String username;
     String password;
-    String firstName;
-    String lastName;
+    String fullName;
     Date bDay;
     String email;
     String tel;
-    String avatar;
     Location homeAddress;
     Profile profile;
     Car[] cars;
+    Media avatar;
+
 
     public User() {}
 
@@ -35,20 +36,12 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Date getbDay() {
@@ -75,11 +68,11 @@ public class User {
         this.tel = tel;
     }
 
-    public String getAvatar() {
+    public Media getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Media avatar) {
         this.avatar = avatar;
     }
 
