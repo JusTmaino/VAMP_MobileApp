@@ -3,6 +3,8 @@ package com.mbds.vamp.vamp_mobileapp.controllers;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.params.ClientPNames;
@@ -62,6 +65,8 @@ public class AppActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static final int SPEECH_REQUEST_CODE = 0;
+    TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +92,10 @@ public class AppActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Starting Voice Assistant ", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                displaySpeechRecognizer();
             }
         });
 
@@ -158,5 +165,53 @@ public class AppActivity extends AppCompatActivity {
     private void logout() {
         //TODO
     }
+
+    private void displaySpeechRecognizer() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRENCH.toString());
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            final String spokenText = results.get(0);
+            Toast.makeText(AppActivity.this, "spokenText :  "+spokenText, Toast.LENGTH_LONG).show();
+            tts = new TextToSpeech(AppActivity.this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+
+                    if(status == TextToSpeech.SUCCESS) {
+                        tts.setLanguage(Locale.FRENCH);
+                        ConvertTextToSpeech(spokenText);
+                    }
+                }
+            });
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void ConvertTextToSpeech(String text) {
+        if(text==null||"".equals(text))
+        {
+            text = "Content not available";
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        }else
+            tts.speak("En cours de "+text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    protected void onPause() {
+
+        if(tts != null){
+
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onPause();
+    }
+
 
 }
