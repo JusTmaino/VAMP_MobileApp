@@ -31,8 +31,10 @@ import com.mbds.vamp.vamp_mobileapp.controllers.fragments.HomeFragment;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.LocationFragment;
 import com.mbds.vamp.vamp_mobileapp.controllers.fragments.ProfileFragment;
 import com.mbds.vamp.vamp_mobileapp.models.Car;
+import com.mbds.vamp.vamp_mobileapp.models.Profile;
 import com.mbds.vamp.vamp_mobileapp.models.User;
 import com.mbds.vamp.vamp_mobileapp.utils.Config;
+import com.mbds.vamp.vamp_mobileapp.utils.SocketManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,12 +68,24 @@ public class AppActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private static final int SPEECH_REQUEST_CODE = 0;
-    TextToSpeech tts;
+    private TextToSpeech tts;
+    private SocketManager sm;
+    private HomeFragment hf;
+    private ControlsFragment cf;
+    private LocationFragment lf;
+    private ProfileFragment pf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
+
+        sm = new SocketManager();
+
+        hf = new HomeFragment();
+        cf = new ControlsFragment();
+        lf = new LocationFragment();
+        pf = new ProfileFragment();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -142,13 +156,13 @@ public class AppActivity extends AppCompatActivity {
             switch (position) {
 
                 case 0:
-                    return new HomeFragment();
+                    return hf;
                 case 1:
-                    return new ControlsFragment();
+                    return cf;
                 case 2:
-                    return new LocationFragment();
+                    return lf;
                 case 3:
-                    return new ProfileFragment();
+                    return pf;
 
             }
 
@@ -178,14 +192,13 @@ public class AppActivity extends AppCompatActivity {
             List<String> results = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
             final String spokenText = results.get(0);
-            Toast.makeText(AppActivity.this, "spokenText :  "+spokenText, Toast.LENGTH_LONG).show();
             tts = new TextToSpeech(AppActivity.this, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
 
-                    if(status == TextToSpeech.SUCCESS) {
+                    if (status == TextToSpeech.SUCCESS) {
                         tts.setLanguage(Locale.FRENCH);
-                        ConvertTextToSpeech(spokenText);
+                        TextToAction(spokenText);
                     }
                 }
             });
@@ -193,19 +206,56 @@ public class AppActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void ConvertTextToSpeech(String text) {
-        if(text==null||"".equals(text))
-        {
+    private void TextToAction(String text) {
+        if (text == null || "".equals(text)) {
             text = "Content not available";
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        }else
-            tts.speak("En cours de "+text, TextToSpeech.QUEUE_FLUSH, null);
+        } else {
+            if (text.toLowerCase().contains("démar".toLowerCase())) {
+                tts.speak("Démarrage en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.startCar();
+
+            }
+            if (text.toLowerCase().contains("arrê".toLowerCase())) {
+                tts.speak("arrêt en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.stopCar();
+            }
+            if (text.toLowerCase().contains("déverro".toLowerCase())
+                    || text.toLowerCase().contains("ferm".toLowerCase())) {
+                tts.speak("déverrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.unlockCar();
+            }
+            if (text.toLowerCase().contains("ferm".toLowerCase())
+                    || text.toLowerCase().contains("verro".toLowerCase())) {
+                tts.speak("verrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.lockCar();
+            }
+            if (text.toLowerCase().contains("vitr".toLowerCase())
+                    && text.toLowerCase().contains("les".toLowerCase())
+                    && text.toLowerCase().contains("tou".toLowerCase())
+                    && (text.toLowerCase().contains("monte".toLowerCase())
+                    || text.toLowerCase().contains("lév".toLowerCase()))) {
+                tts.speak("monte des vitre en cours", TextToSpeech.QUEUE_FLUSH, null);
+                sm.allWindowUp(1);
+            }
+            if (text.toLowerCase().contains("vitr".toLowerCase())
+                    && text.toLowerCase().contains("les".toLowerCase())
+                    && text.toLowerCase().contains("tou".toLowerCase())
+                    && (text.toLowerCase().contains("desc".toLowerCase())
+                    || text.toLowerCase().contains("bais".toLowerCase()))) {
+                tts.speak("descente des vitre en cours", TextToSpeech.QUEUE_FLUSH, null);
+                sm.allWindowDown(1);
+            }
+            //TODO complete the other cases
+        }
+
+
     }
 
     @Override
     protected void onPause() {
 
-        if(tts != null){
+        if (tts != null) {
 
             tts.stop();
             tts.shutdown();

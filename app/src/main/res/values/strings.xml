@@ -8,8 +8,8 @@
 
     <!-- .AppActivity -->
     <string name="tab_home">Accueil</string>
-    <string name="tab_controls">Contrôles</string>
-    <string name="tab_map">Map</string>
+    <string name="tab_controls">Vitres</string>
+    <string name="tab_map">Carte</string>
     <string name="tab_profile">Profil</string>
     <string name="action_log">Connexion</string>
 
@@ -43,9 +43,7 @@
     <string name="profile_tel1">Tel 1</string>
     <string name="profile_tel2">Tel 2</string>
     <string name="profile_button_save">ENREGISTRER</string>
-
-
-
+    <string name="explanation" />
 
 
 </resources>

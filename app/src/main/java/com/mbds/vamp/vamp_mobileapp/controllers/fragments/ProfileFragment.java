@@ -48,7 +48,6 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        firstnameTV = (TextView) getActivity().findViewById(R.id.firstname_tv);
         lastnameTV = (TextView) getActivity().findViewById(R.id.lastname_tv);
         emailTV = (TextView) getActivity().findViewById(R.id.email_tv);
         phoneTV = (TextView) getActivity().findViewById(R.id.phone_tv);
@@ -90,7 +89,6 @@ public class ProfileFragment extends Fragment {
                                 //loggedUser.setbDay(new Date());
                                 //loggedUser.setAvatar();
 
-                                firstnameTV.setText(loggedUser.getFullName());
                                 lastnameTV.setText(loggedUser.getFullName());
                                 emailTV.setText(loggedUser.getEmail());
                                 phoneTV.setText(loggedUser.getTel());

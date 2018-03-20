@@ -7,7 +7,7 @@ package com.mbds.vamp.vamp_mobileapp.utils;
 public class Config {
 
     // WEB Server URL
-    private static final String WEB_SERVER_URL = "http://192.168.43.217:8080/api/";
+    private static final String WEB_SERVER_URL = "http://192.168.43.145:8080/api/";
     // Socket Server URL
     public static final String SOCKET_SERVER_URL = "http://192.168.43.48:8080";
 

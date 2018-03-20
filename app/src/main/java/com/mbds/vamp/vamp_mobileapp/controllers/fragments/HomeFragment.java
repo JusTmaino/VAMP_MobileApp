@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private Spinner spinner;
 
-    SocketManager sm;
+    private SocketManager sm;
 
     private String username;
     private String access_token;
@@ -108,17 +108,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
                 if (state_lock) {
-                    sm.lockCar();
-                    state_lock = false;
-                    lock.setImageResource(R.drawable.ic_unlock);
-                    Snackbar.make(v, R.string.home_unlock, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.home_unlock, null).show();
+                    unlockCar();
                 } else {
-                    sm.unlockCar();
-                    state_lock = true;
-                    lock.setImageResource(R.drawable.ic_lock);
-                    Snackbar.make(v, R.string.home_lock, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.home_lock, null).show();
+                    lockCar();
                 }
             }
 
@@ -128,16 +120,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
                 if (state_start) {
-                    state_start = false;
-                    start.setImageResource(R.drawable.ic_start);
-                    Snackbar.make(v, R.string.home_stop, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.home_stop, null).show();
+                    stopCar();
                 } else {
-                    state_start = true;
-                    start.setImageResource(R.drawable.ic_stop);
-                    Snackbar.make(v, R.string.home_start, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.home_start, null).show();
-
+                    startCar();
                 }
             }
         });
@@ -273,6 +258,44 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             state_lock = userCars.get(i).isLocked();
             //TODO seatCount
         }
+    }
+
+    public void startCar() {
+        state_start = true;
+        sm.startCar();
+        start.setImageResource(R.drawable.ic_stop);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_start, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_start, null).show();
+    }
+
+    public void stopCar() {
+        state_start = false;
+        sm.stopCar();
+        start.setImageResource(R.drawable.ic_start);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_stop, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_stop, null).show();
+    }
+
+    public void lockCar() {
+        sm.lockCar();
+        state_lock = true;
+        lock.setImageResource(R.drawable.ic_lock);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_lock, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_lock, null).show();
+    }
+
+    public void unlockCar() {
+        sm.unlockCar();
+        state_lock = false;
+        lock.setImageResource(R.drawable.ic_unlock);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_unlock, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_unlock, null).show();
+
+
     }
 
     @Override

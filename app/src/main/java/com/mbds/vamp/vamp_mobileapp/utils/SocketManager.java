@@ -44,6 +44,46 @@ public class SocketManager {
         mSocket.emit("start", 0);
     }
 
+    public void allWindowUp(int isClicked) {
+        mSocket.emit("all_window_up", isClicked);
+    }
+
+    public void allWindowDown(int isClicked) {
+        mSocket.emit("all_window_down", isClicked);
+    }
+
+    public void frontLeftWindowUp(int isClicked) {
+        mSocket.emit("fl_window_up", isClicked);
+    }
+
+    public void frontLeftWindowDown(int isClicked) {
+        mSocket.emit("fl_window_down", isClicked);
+    }
+
+    public void frontRightWindowUp(int isClicked) {
+        mSocket.emit("fr_window_up", isClicked);
+    }
+
+    public void frontRightWindowDown(int isClicked) {
+        mSocket.emit("fr_window_down", isClicked);
+    }
+
+    public void backLeftWindowUp(int isClicked) {
+        mSocket.emit("bl_window_up", isClicked);
+    }
+
+    public void backLeftWindowDown(int isClicked) {
+        mSocket.emit("bl_window_down", isClicked);
+    }
+
+    public void backRightWindowUp(int isClicked) {
+        mSocket.emit("br_window_up", isClicked);
+    }
+
+    public void backRightWindowDown(int isClicked) {
+        mSocket.emit("br_window_down", isClicked);
+    }
+
     public void disconnect() {
         mSocket.disconnect();
     }
