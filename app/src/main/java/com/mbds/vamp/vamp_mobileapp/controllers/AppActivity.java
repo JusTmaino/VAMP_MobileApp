@@ -212,39 +212,66 @@ public class AppActivity extends AppCompatActivity {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         } else {
             if (text.toLowerCase().contains("démar".toLowerCase())) {
-                tts.speak("Démarrage en cours", TextToSpeech.QUEUE_FLUSH, null);
-                hf.startCar();
+                tts.speak("C'est parti, démarrage en cours.", TextToSpeech.QUEUE_FLUSH, null);
+                hf.startCar(1);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                hf.startCar(0);
+                            }
+                        },
+                        2000);
 
             }
-            if (text.toLowerCase().contains("arrê".toLowerCase())) {
-                tts.speak("arrêt en cours", TextToSpeech.QUEUE_FLUSH, null);
-                hf.stopCar();
+            else if (text.toLowerCase().contains("arrê".toLowerCase())) {
+                tts.speak("Arrêt en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.stopCar(1);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                hf.stopCar(0);
+                            }
+                        },
+                        2000);
             }
-            if (text.toLowerCase().contains("déverro".toLowerCase())
+            else if (text.toLowerCase().contains("déverro".toLowerCase())
                     || text.toLowerCase().contains("ferm".toLowerCase())) {
-                tts.speak("déverrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
-                hf.unlockCar();
+                tts.speak("Déverrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.unlockCar(1);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                hf.unlockCar(0);
+                            }
+                        },
+                        2000);
             }
-            if (text.toLowerCase().contains("ferm".toLowerCase())
+            else if (text.toLowerCase().contains("ferm".toLowerCase())
                     || text.toLowerCase().contains("verro".toLowerCase())) {
-                tts.speak("verrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
-                hf.lockCar();
+                tts.speak("Verrouillage en cours, à bientôt !", TextToSpeech.QUEUE_FLUSH, null);
+                hf.lockCar(1);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                hf.lockCar(0);
+                            }
+                        },
+                        2000);
             }
-            if (text.toLowerCase().contains("vitr".toLowerCase())
-                    && text.toLowerCase().contains("les".toLowerCase())
-                    && text.toLowerCase().contains("tou".toLowerCase())
+            else if (text.toLowerCase().contains("vitr".toLowerCase())
                     && (text.toLowerCase().contains("monte".toLowerCase())
-                    || text.toLowerCase().contains("lév".toLowerCase()))) {
-                tts.speak("monte des vitre en cours", TextToSpeech.QUEUE_FLUSH, null);
-                sm.allWindowUp(1);
+                    || text.toLowerCase().contains("leve".toLowerCase()))) {
+                tts.speak("Montée des vitres en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.allWindowsUp();
             }
-            if (text.toLowerCase().contains("vitr".toLowerCase())
-                    && text.toLowerCase().contains("les".toLowerCase())
-                    && text.toLowerCase().contains("tou".toLowerCase())
-                    && (text.toLowerCase().contains("desc".toLowerCase())
-                    || text.toLowerCase().contains("bais".toLowerCase()))) {
-                tts.speak("descente des vitre en cours", TextToSpeech.QUEUE_FLUSH, null);
-                sm.allWindowDown(1);
+            else if (text.toLowerCase().contains("vitr".toLowerCase())
+                    && (text.toLowerCase().contains("descent".toLowerCase())
+                     || text.toLowerCase().contains("baiss".toLowerCase()))) {
+                tts.speak("Descente des vitres en cours", TextToSpeech.QUEUE_FLUSH, null);
+                hf.allWindowsDown();
+            }
+            else {
+                tts.speak("Veuillez répéter s'il vous plait, je n'ai pas compris votre demande.", TextToSpeech.QUEUE_FLUSH, null);
             }
             //TODO complete the other cases
         }

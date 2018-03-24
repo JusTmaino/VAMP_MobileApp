@@ -70,12 +70,12 @@
 
             <ImageButton
                 android:id="@+id/home_lock"
-                android:padding="5dp"
-                android:paddingBottom="20dp"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_lock"
-                android:contentDescription="@string/home_lock"/>
+                android:contentDescription="@string/home_lock"
+                android:padding="5dp"
+                android:paddingBottom="20dp"
+                android:src="@drawable/ic_lock" />
 
             <ImageButton
                 android:id="@+id/home_start"
@@ -86,15 +86,15 @@
                 android:src="@drawable/ic_start" />
 
             <ImageButton
-                android:id="@+id/home_control_undefined_3"
-                android:padding="5dp"
+                android:id="@+id/home_control_horn"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_help"
-                android:contentDescription="@string/home_undefined"/>
+                android:contentDescription="@string/home_undefined"
+                android:padding="5dp"
+                android:src="@drawable/horn" />
 
             <ImageButton
-                android:id="@+id/home_control_undefined_4"
+                android:id="@+id/home_control_all_up"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:contentDescription="@string/home_undefined"
@@ -102,7 +102,7 @@
                 android:src="@drawable/window_up" />
 
             <ImageButton
-                android:id="@+id/home_control_undefined_5"
+                android:id="@+id/home_control_all_down"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:contentDescription="@string/home_undefined"

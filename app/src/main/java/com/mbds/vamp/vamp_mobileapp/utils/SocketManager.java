@@ -28,20 +28,24 @@ public class SocketManager {
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void lockCar() {
-        mSocket.emit("lock", 1);
+    public void lockCar(int isClicked) {
+        mSocket.emit("lock", isClicked);
     }
 
-    public void unlockCar() {
-        mSocket.emit("lock", 0);
+    public void unlockCar(int isClicked) {
+        mSocket.emit("unlock", isClicked);
     }
 
-    public void startCar() {
-        mSocket.emit("start", 1);
+    public void startCar(int isClicked) {
+        mSocket.emit("start", isClicked);
     }
 
-    public void stopCar() {
-        mSocket.emit("start", 0);
+    public void stopCar(int isClicked) {
+        mSocket.emit("stop", isClicked);
+    }
+
+    public void horn(int isClicked) {
+        mSocket.emit("horn", isClicked);
     }
 
     public void allWindowUp(int isClicked) {

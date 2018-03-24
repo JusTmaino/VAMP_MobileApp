@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,9 +49,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     ImageButton start;
     boolean state_start = false;
 
-    ImageButton undefined1;
-    ImageButton undefined2;
-    ImageButton undefined3;
+    ImageButton hornButton;
+    ImageButton allUpButton;
+    ImageButton allDownButton;
 
     private Spinner spinner;
 
@@ -81,9 +82,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         lock = (ImageButton) getActivity().findViewById(R.id.home_lock);
         start = (ImageButton) getActivity().findViewById(R.id.home_start);
-        undefined1 = (ImageButton) getActivity().findViewById(R.id.home_control_undefined_3);
-        undefined2 = (ImageButton) getActivity().findViewById(R.id.home_control_undefined_4);
-        undefined3 = (ImageButton) getActivity().findViewById(R.id.home_control_undefined_5);
+        hornButton = (ImageButton) getActivity().findViewById(R.id.home_control_horn);
+        allUpButton = (ImageButton) getActivity().findViewById(R.id.home_control_all_up);
+        allDownButton = (ImageButton) getActivity().findViewById(R.id.home_control_all_down);
         spinner = (Spinner) getActivity().findViewById(R.id.spinner);
 
 
@@ -104,50 +105,85 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Gestion de commandes de contrôle
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        lock.setOnClickListener(new View.OnClickListener() {
+        lock.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (state_lock) {
-                    unlockCar();
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                       unlockCar(0);
+                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        unlockCar(1);
+                        state_lock = false;
+                    }
+                    return false;
                 } else {
-                    lockCar();
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        lockCar(0);
+                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        lockCar(1);
+                        state_lock = true;
+                    }
+                    return false;
                 }
             }
-
         });
 
-        start.setOnClickListener(new View.OnClickListener() {
+        start.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (state_start) {
-                    stopCar();
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        stopCar(0);
+                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        stopCar(1);
+                        state_start = false;
+                    }
+                    return false;
                 } else {
-                    startCar();
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        startCar(0);
+                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        startCar(1);
+                        state_start = true;
+                    }
+                    return false;
                 }
             }
         });
 
-        undefined1.setOnClickListener(new View.OnClickListener() {
+        hornButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Snackbar.make(v, R.string.home_undefined, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.home_undefined, null).show();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sm.horn(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.horn(1);
+                }
+                return false;
             }
         });
 
-        undefined2.setOnClickListener(new View.OnClickListener() {
+        allUpButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Snackbar.make(v, R.string.home_undefined, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.home_undefined, null).show();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sm.allWindowUp(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.allWindowUp(1);
+                }
+                return false;
             }
         });
 
-        undefined3.setOnClickListener(new View.OnClickListener() {
+        allDownButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Snackbar.make(v, R.string.home_undefined, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.home_undefined, null).show();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sm.allWindowDown(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.allWindowDown(1);
+                }
+                return false;
             }
         });
 
@@ -260,42 +296,64 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
-    public void startCar() {
-        state_start = true;
-        sm.startCar();
-        start.setImageResource(R.drawable.ic_stop);
-        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                R.string.home_start, Snackbar.LENGTH_LONG)
-                .setAction(R.string.home_start, null).show();
-    }
-
-    public void stopCar() {
-        state_start = false;
-        sm.stopCar();
-        start.setImageResource(R.drawable.ic_start);
-        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                R.string.home_stop, Snackbar.LENGTH_LONG)
-                .setAction(R.string.home_stop, null).show();
-    }
-
-    public void lockCar() {
-        sm.lockCar();
-        state_lock = true;
+    public void lockCar(int isClicked) {
+        sm.lockCar(isClicked);
         lock.setImageResource(R.drawable.ic_lock);
         Snackbar.make(getActivity().findViewById(android.R.id.content),
                 R.string.home_lock, Snackbar.LENGTH_LONG)
                 .setAction(R.string.home_lock, null).show();
     }
 
-    public void unlockCar() {
-        sm.unlockCar();
-        state_lock = false;
+    public void unlockCar(int isClicked) {
+        sm.unlockCar(isClicked);
         lock.setImageResource(R.drawable.ic_unlock);
         Snackbar.make(getActivity().findViewById(android.R.id.content),
                 R.string.home_unlock, Snackbar.LENGTH_LONG)
                 .setAction(R.string.home_unlock, null).show();
+    }
 
+    public void startCar(int isClicked) {
+        sm.startCar(isClicked);
+        start.setImageResource(R.drawable.ic_stop);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_start, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_start, null).show();
+    }
 
+    public void stopCar(int isClicked) {
+        sm.stopCar(isClicked);
+        start.setImageResource(R.drawable.ic_start);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                R.string.home_stop, Snackbar.LENGTH_LONG)
+                .setAction(R.string.home_stop, null).show();
+    }
+
+    public void allWindowsUp(){
+        sm.allWindowUp(0);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                "Montée des vitres", Snackbar.LENGTH_LONG).show();
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        sm.allWindowUp(1);
+
+                    }
+                },
+                9000);
+    }
+
+    public void allWindowsDown(){
+        sm.allWindowDown(0);
+        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                "Descente des vitres", Snackbar.LENGTH_LONG).show();
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        sm.allWindowDown(1);
+
+                    }
+                },
+                9000);
     }
 
     @Override

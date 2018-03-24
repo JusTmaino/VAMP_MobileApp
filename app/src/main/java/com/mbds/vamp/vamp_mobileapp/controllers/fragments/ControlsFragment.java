@@ -59,9 +59,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.frontLeftWindowUp(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.frontLeftWindowUp(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.frontLeftWindowUp(1);
                 }
                 return false;
             }
@@ -71,9 +71,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.frontRightWindowUp(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.frontRightWindowUp(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.frontRightWindowUp(1);
                 }
                 return false;
             }
@@ -83,9 +83,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.backLeftWindowUp(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.backLeftWindowUp(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.backLeftWindowUp(1);
                 }
                 return false;
             }
@@ -95,9 +95,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.backRightWindowUp(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.backRightWindowUp(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.backRightWindowUp(1);
                 }
                 return false;
             }
@@ -107,9 +107,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.frontLeftWindowDown(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.frontLeftWindowDown(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.frontLeftWindowDown(1);
                 }
                 return false;
             }
@@ -119,9 +119,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.frontRightWindowDown(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.frontRightWindowDown(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.frontRightWindowDown(1);
                 }
                 return false;
             }
@@ -131,9 +131,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.backLeftWindowDown(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.backLeftWindowDown(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.backLeftWindowDown(1);
                 }
                 return false;
             }
@@ -143,9 +143,9 @@ public class ControlsFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sm.backRightWindowDown(1);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     sm.backRightWindowDown(0);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    sm.backRightWindowDown(1);
                 }
                 return false;
             }
