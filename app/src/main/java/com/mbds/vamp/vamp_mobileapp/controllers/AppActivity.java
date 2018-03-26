@@ -1,8 +1,19 @@
 package com.mbds.vamp.vamp_mobileapp.controllers;
 
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.MifareClassic;
+import android.nfc.tech.MifareUltralight;
+import android.os.Parcelable;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
@@ -20,6 +31,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.socketio.client.IO;
@@ -34,7 +46,10 @@ import com.mbds.vamp.vamp_mobileapp.models.Car;
 import com.mbds.vamp.vamp_mobileapp.models.Profile;
 import com.mbds.vamp.vamp_mobileapp.models.User;
 import com.mbds.vamp.vamp_mobileapp.utils.Config;
+import com.mbds.vamp.vamp_mobileapp.utils.NdefMessageParser;
 import com.mbds.vamp.vamp_mobileapp.utils.SocketManager;
+import com.mbds.vamp.vamp_mobileapp.utils.Utils;
+import com.mbds.vamp.vamp_mobileapp.utils.record.ParsedNdefRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,6 +89,8 @@ public class AppActivity extends AppCompatActivity {
     private ControlsFragment cf;
     private LocationFragment lf;
     private ProfileFragment pf;
+    private NfcAdapter nfcAdapter;
+    private PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +98,25 @@ public class AppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app);
 
         sm = new SocketManager();
-
         hf = new HomeFragment();
         cf = new ControlsFragment();
         lf = new LocationFragment();
         pf = new ProfileFragment();
+
+        //---------------nfc----------------
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (nfcAdapter == null) {
+            Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        pendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, this.getClass())
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        //---------------nfc----------------
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -177,7 +208,32 @@ public class AppActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        //TODO
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Etes-vous sûr de se déconnecter?");
+        alertDialogBuilder.setPositiveButton("Oui",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        SharedPreferences preferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, false);
+                        editor.putString(Config.USERNAME_SHARED_PREF, "");
+                        editor.commit();
+                        Intent intent = new Intent(AppActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Non",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void displaySpeechRecognizer() {
@@ -220,10 +276,9 @@ public class AppActivity extends AppCompatActivity {
                                 hf.startCar(0);
                             }
                         },
-                        2000);
+                        1000);
 
-            }
-            else if (text.toLowerCase().contains("arrê".toLowerCase())) {
+            } else if (text.toLowerCase().contains("arrê".toLowerCase())) {
                 tts.speak("Arrêt en cours", TextToSpeech.QUEUE_FLUSH, null);
                 hf.stopCar(1);
                 new android.os.Handler().postDelayed(
@@ -232,9 +287,8 @@ public class AppActivity extends AppCompatActivity {
                                 hf.stopCar(0);
                             }
                         },
-                        2000);
-            }
-            else if (text.toLowerCase().contains("déverro".toLowerCase())
+                        1000);
+            } else if (text.toLowerCase().contains("déverro".toLowerCase())
                     || text.toLowerCase().contains("ferm".toLowerCase())) {
                 tts.speak("Déverrouillage en cours", TextToSpeech.QUEUE_FLUSH, null);
                 hf.unlockCar(1);
@@ -244,9 +298,8 @@ public class AppActivity extends AppCompatActivity {
                                 hf.unlockCar(0);
                             }
                         },
-                        2000);
-            }
-            else if (text.toLowerCase().contains("ferm".toLowerCase())
+                        1000);
+            } else if (text.toLowerCase().contains("ferm".toLowerCase())
                     || text.toLowerCase().contains("verro".toLowerCase())) {
                 tts.speak("Verrouillage en cours, à bientôt !", TextToSpeech.QUEUE_FLUSH, null);
                 hf.lockCar(1);
@@ -256,21 +309,18 @@ public class AppActivity extends AppCompatActivity {
                                 hf.lockCar(0);
                             }
                         },
-                        2000);
-            }
-            else if (text.toLowerCase().contains("vitr".toLowerCase())
+                        1000);
+            } else if (text.toLowerCase().contains("vitr".toLowerCase())
                     && (text.toLowerCase().contains("monte".toLowerCase())
                     || text.toLowerCase().contains("leve".toLowerCase()))) {
                 tts.speak("Montée des vitres en cours", TextToSpeech.QUEUE_FLUSH, null);
                 hf.allWindowsUp();
-            }
-            else if (text.toLowerCase().contains("vitr".toLowerCase())
+            } else if (text.toLowerCase().contains("vitr".toLowerCase())
                     && (text.toLowerCase().contains("descent".toLowerCase())
-                     || text.toLowerCase().contains("baiss".toLowerCase()))) {
+                    || text.toLowerCase().contains("baiss".toLowerCase()))) {
                 tts.speak("Descente des vitres en cours", TextToSpeech.QUEUE_FLUSH, null);
                 hf.allWindowsDown();
-            }
-            else {
+            } else {
                 tts.speak("Veuillez répéter s'il vous plait, je n'ai pas compris votre demande.", TextToSpeech.QUEUE_FLUSH, null);
             }
             //TODO complete the other cases
@@ -290,5 +340,168 @@ public class AppActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    /**
+     * --------------------------NFC------------------------
+     */
+
+    private String dumpTagData(Tag tag) {
+        StringBuilder sb = new StringBuilder();
+        byte[] id = tag.getId();
+        sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
+        sb.append("ID (reversed hex): ").append(Utils.toReversedHex(id)).append('\n');
+        sb.append("ID (dec): ").append(Utils.toDec(id)).append('\n');
+        sb.append("ID (reversed dec): ").append(Utils.toReversedDec(id)).append('\n');
+
+        String prefix = "android.nfc.tech.";
+        sb.append("Technologies: ");
+        for (String tech : tag.getTechList()) {
+            sb.append(tech.substring(prefix.length()));
+            sb.append(", ");
+        }
+
+        sb.delete(sb.length() - 2, sb.length());
+
+        for (String tech : tag.getTechList()) {
+            if (tech.equals(MifareClassic.class.getName())) {
+                sb.append('\n');
+                String type = "Unknown";
+
+                try {
+                    MifareClassic mifareTag = MifareClassic.get(tag);
+
+                    switch (mifareTag.getType()) {
+                        case MifareClassic.TYPE_CLASSIC:
+                            type = "Classic";
+                            break;
+                        case MifareClassic.TYPE_PLUS:
+                            type = "Plus";
+                            break;
+                        case MifareClassic.TYPE_PRO:
+                            type = "Pro";
+                            break;
+                    }
+                    sb.append("Mifare Classic type: ");
+                    sb.append(type);
+                    sb.append('\n');
+
+                    sb.append("Mifare size: ");
+                    sb.append(mifareTag.getSize() + " bytes");
+                    sb.append('\n');
+
+                    sb.append("Mifare sectors: ");
+                    sb.append(mifareTag.getSectorCount());
+                    sb.append('\n');
+
+                    sb.append("Mifare blocks: ");
+                    sb.append(mifareTag.getBlockCount());
+                } catch (Exception e) {
+                    sb.append("Mifare classic error: " + e.getMessage());
+                }
+            }
+
+            if (tech.equals(MifareUltralight.class.getName())) {
+                sb.append('\n');
+                MifareUltralight mifareUlTag = MifareUltralight.get(tag);
+                String type = "Unknown";
+                switch (mifareUlTag.getType()) {
+                    case MifareUltralight.TYPE_ULTRALIGHT:
+                        type = "Ultralight";
+                        break;
+                    case MifareUltralight.TYPE_ULTRALIGHT_C:
+                        type = "Ultralight C";
+                        break;
+                }
+                sb.append("Mifare Ultralight type: ");
+                sb.append(type);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (nfcAdapter != null) {
+            if (!nfcAdapter.isEnabled())
+                showWirelessSettings();
+
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        }
+    }
+
+    private void showWirelessSettings() {
+        Toast.makeText(this, "You need to enable NFC", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        resolveIntent(intent);
+    }
+
+    private void resolveIntent(Intent intent) {
+        String action = intent.getAction();
+
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage[] msgs;
+
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
+                }
+
+            } else {
+                byte[] empty = new byte[0];
+                byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+                Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                byte[] payload = dumpTagData(tag).getBytes();
+                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
+                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
+                msgs = new NdefMessage[]{msg};
+            }
+
+            displayMsgs(msgs);
+        }
+    }
+
+    private void displayMsgs(NdefMessage[] msgs) {
+        if (msgs == null || msgs.length == 0)
+            return;
+
+        StringBuilder builder = new StringBuilder();
+        List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
+        final int size = records.size();
+
+        for (int i = 0; i < size; i++) {
+            ParsedNdefRecord record = records.get(i);
+            String str = record.str();
+            builder.append(str).append("\n");
+        }
+
+        String value = builder.toString();
+
+        if (value.contains("vamp")) {
+            hf.lockUnlockNfc();
+        }
+
+    }
+
+    /**
+     * --------------------------NFC------------------------
+     */
 
 }

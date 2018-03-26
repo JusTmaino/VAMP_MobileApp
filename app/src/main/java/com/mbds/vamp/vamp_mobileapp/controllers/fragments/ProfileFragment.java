@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class ProfileFragment extends Fragment {
 
-    TextView firstnameTV, lastnameTV, emailTV, phoneTV, addressTV ;
+    TextView firstnameTV, lastnameTV, emailTV, phoneTV ;
 
     private String username;
     private String access_token;
@@ -48,10 +48,9 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        lastnameTV = (TextView) getActivity().findViewById(R.id.lastname_tv);
+        lastnameTV = (TextView) getActivity().findViewById(R.id.username_tv);
         emailTV = (TextView) getActivity().findViewById(R.id.email_tv);
         phoneTV = (TextView) getActivity().findViewById(R.id.phone_tv);
-        addressTV = (TextView) getActivity().findViewById(R.id.address_tv);
 
         //Fetching username and token from shared preferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);

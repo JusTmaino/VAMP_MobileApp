@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
@@ -32,8 +34,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:ems="10"
+        android:hint="Pseudo"
         android:inputType="textEmailAddress"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite" />
 
     <EditText
         android:id="@+id/login_password"
@@ -41,9 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
+        android:hint="Mot de passe"
+        android:textColorHint="@color/colorWhite"
         android:ems="10"
-        android:inputType="text"
-        android:textColor="@color/colorPrimary" />
+        android:inputType="textPassword"
+        android:textColor="@color/colorWhite" />
 
     <Button
         android:text="@string/connection"

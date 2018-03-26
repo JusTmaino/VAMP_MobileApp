@@ -1,6 +1,10 @@
 package com.mbds.vamp.vamp_mobileapp.utils;
 
+import android.util.Log;
+
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
+import com.mbds.vamp.vamp_mobileapp.controllers.fragments.LocationFragment;
 
 import java.net.URISyntaxException;
 
@@ -11,6 +15,7 @@ import java.net.URISyntaxException;
 public class SocketManager {
 
     private com.github.nkzawa.socketio.client.Socket mSocket;
+    public String position = "";
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     // Connextion au serveur du véhicule
@@ -91,5 +96,18 @@ public class SocketManager {
     public void disconnect() {
         mSocket.disconnect();
     }
+
+    /*public void getCarPosition() {
+        mSocket.on("langLat", onNewMessage );
+    }
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            position = (String) args[0];
+            Log.d("hello", position);
+
+        }
+    };*/
 
 }

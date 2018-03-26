@@ -296,6 +296,30 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
+    public void lockUnlockNfc() {
+        if (!state_lock){
+            unlockCar(0);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            unlockCar(1);
+                            state_lock = true;
+                        }
+                    },
+                    1000);
+        } else {
+            lockCar(0);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            lockCar(1);
+                            state_lock = false;
+                        }
+                    },
+                    1000);
+        }
+    }
+
     public void lockCar(int isClicked) {
         sm.lockCar(isClicked);
         lock.setImageResource(R.drawable.ic_lock);
@@ -339,7 +363,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     }
                 },
-                9000);
+                000);
     }
 
     public void allWindowsDown(){
@@ -353,7 +377,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     }
                 },
-                9000);
+                5000);
     }
 
     @Override

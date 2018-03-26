@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     //Adding values to editor
                     editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
                     editor.putString(Config.USERNAME_SHARED_PREF, username);
-                    //editor.putString(Config.PASSWORD_SHARED_PREF, password);
+                    editor.putString(Config.PASSWORD_SHARED_PREF, password);
                     editor.putString(Config.ACCESS_TOKEN_SHARED_PREF, access_token);
                     //Saving values to editor
                     editor.commit();
