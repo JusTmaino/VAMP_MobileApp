@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.nkzawa.socketio.client.IO;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mbds.vamp.vamp_mobileapp.R;
@@ -30,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private User loggedUser;
     private List<Car> userCars;
     private ArrayAdapter carArrayAdapter;
+
+    private com.github.nkzawa.socketio.client.Socket mSocket;
 
 
     @Nullable
@@ -334,6 +338,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         Snackbar.make(getActivity().findViewById(android.R.id.content),
                 R.string.home_unlock, Snackbar.LENGTH_LONG)
                 .setAction(R.string.home_unlock, null).show();
+        sendUserInfoToDashboard();
     }
 
     public void startCar(int isClicked) {
@@ -363,7 +368,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     }
                 },
-                000);
+                7000);
     }
 
     public void allWindowsDown(){
@@ -377,7 +382,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     }
                 },
-                5000);
+                7000);
+    }
+
+    public void sendUserInfoToDashboard(){
+        try {
+            mSocket = IO.socket(Config.SOCKET_SERVER_URL); //a remplacer par l'adresse ip du dashboard
+            mSocket.connect();
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        mSocket.emit("username", sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
+        mSocket.emit("password", sharedPreferences.getString(Config.PASSWORD_SHARED_PREF, ""));
     }
 
     @Override

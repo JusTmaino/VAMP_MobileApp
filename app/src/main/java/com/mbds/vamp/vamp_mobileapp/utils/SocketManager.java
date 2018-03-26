@@ -97,17 +97,4 @@ public class SocketManager {
         mSocket.disconnect();
     }
 
-    /*public void getCarPosition() {
-        mSocket.on("langLat", onNewMessage );
-    }
-
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            position = (String) args[0];
-            Log.d("hello", position);
-
-        }
-    };*/
-
 }
