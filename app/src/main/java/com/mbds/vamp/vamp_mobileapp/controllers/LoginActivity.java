@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -40,9 +41,10 @@ import cz.msebera.android.httpclient.client.params.ClientPNames;
 import cz.msebera.android.httpclient.entity.ContentType;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity {
 
     Button connexion;
+    ImageButton goSetting;
     EditText usernameEditText;
     EditText passwordEditText;
 
@@ -58,7 +60,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordEditText = (EditText) findViewById(R.id.login_password);
         connexion = (Button) findViewById(R.id.login_button);
 
-        connexion.setOnClickListener(this);
+        connexion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -77,21 +91,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        try {
-            login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-       /* Intent intent = new Intent(LoginActivity.this, AppActivity.class);
-        startActivity(intent);*/
     }
 
     private void login(final String username, final String password) throws JSONException, IOException {

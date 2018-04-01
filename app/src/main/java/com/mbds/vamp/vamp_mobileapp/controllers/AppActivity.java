@@ -479,6 +479,7 @@ public class AppActivity extends AppCompatActivity {
     }
 
     private void displayMsgs(NdefMessage[] msgs) {
+
         if (msgs == null || msgs.length == 0)
             return;
 
@@ -494,10 +495,14 @@ public class AppActivity extends AppCompatActivity {
 
         String value = builder.toString();
 
-        if (value.contains("vamp")) {
-            hf.lockUnlockNfc();
-        }
+        Log.d("nfc", value);
 
+        ArrayList<String> carsIds = new ArrayList<String>();
+        for (String id : hf.getCarsIds()) {
+            if (value.contains(id)) {
+                hf.lockUnlockNfc();
+            }
+        }
     }
 
     /**

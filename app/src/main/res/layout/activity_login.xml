@@ -34,8 +34,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:ems="10"
-        android:hint="Pseudo"
-        android:inputType="textEmailAddress"
+        android:hint="pseudo"
+        android:inputType="text|textEmailAddress"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite" />
 
@@ -45,11 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:hint="Mot de passe"
-        android:textColorHint="@color/colorWhite"
         android:ems="10"
+        android:hint="mot de passe"
         android:inputType="textPassword"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite" />
 
     <Button
         android:text="@string/connection"

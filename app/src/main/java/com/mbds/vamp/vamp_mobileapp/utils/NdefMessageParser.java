@@ -18,19 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.mbds.vamp.vamp_mobileapp.R;
 import com.mbds.vamp.vamp_mobileapp.utils.record.ParsedNdefRecord;
-import com.mbds.vamp.vamp_mobileapp.utils.record.SmartPoster;
 import com.mbds.vamp.vamp_mobileapp.utils.record.TextRecord;
-import com.mbds.vamp.vamp_mobileapp.utils.record.UriRecord;
 
 public class NdefMessageParser {
 
@@ -47,12 +39,8 @@ public class NdefMessageParser {
     public static List<ParsedNdefRecord> getRecords(NdefRecord[] records) {
         List<ParsedNdefRecord> elements = new ArrayList<ParsedNdefRecord>();
         for (final NdefRecord record : records) {
-            if (UriRecord.isUri(record)) {
-                elements.add(UriRecord.parse(record));
-            } else if (TextRecord.isText(record)) {
+            if (TextRecord.isText(record)) {
                 elements.add(TextRecord.parse(record));
-            } else if (SmartPoster.isPoster(record)) {
-                elements.add(SmartPoster.parse(record));
             } else {
             	elements.add(new ParsedNdefRecord() {
                     public String str() {

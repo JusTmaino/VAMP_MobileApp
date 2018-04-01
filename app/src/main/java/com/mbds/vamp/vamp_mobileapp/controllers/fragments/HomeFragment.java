@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private String username;
     private String access_token;
     private User loggedUser;
+    ArrayList<String> carsIds;
     private List<Car> userCars;
     private ArrayAdapter carArrayAdapter;
 
@@ -224,7 +225,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                                 JSONArray jsonArray = user.getJSONArray("cars");
 
-                                final ArrayList<String> carsIds = new ArrayList<String>();
+                                carsIds = new ArrayList<String>();
                                 if (jsonArray != null) {
                                     int len = jsonArray.length();
                                     for (int i = 0; i < len; i++) {
@@ -398,6 +399,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         mSocket.emit("username", sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
         mSocket.emit("password", sharedPreferences.getString(Config.PASSWORD_SHARED_PREF, ""));
     }
+
+    public ArrayList<String> getCarsIds() {
+        return carsIds;
+    }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
